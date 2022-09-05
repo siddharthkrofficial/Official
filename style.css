@@ -23,7 +23,7 @@ body{
 .wrapper{
   position: relative;
   width: 350px;
-  padding: 30px;
+  padding: 80px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -91,7 +91,7 @@ body{
   position: relative;
   height: 40px;
   width: 40px;
-  margin: 0 5px;
+  margin: 0 2px;
   display: inline-flex;
   text-decoration: none;
   border-radius: 50%;
