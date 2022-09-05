@@ -55,8 +55,8 @@ body{
   right: 15px;
 }
 .wrapper .img-area{
-  height: 100px;
-  width: 100px;
+  height: 200px;
+  width: 200px;
   border-radius: 50%;
   display: flex;
   align-items: center;
