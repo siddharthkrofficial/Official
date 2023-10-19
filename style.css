@@ -23,7 +23,7 @@ body{
 .wrapper{
   position: relative;
   width: 550px;
-  padding: 90px;
+  padding: 50px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -86,7 +86,12 @@ body{
 }
 .wrapper .social-icons{
   margin: 15px 0 25px 0;
-  width: 120%;
+  width: 100%;
+  display: flex;
+  column-gap: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
+
 }
 .social-icons a{
   position: relative;
@@ -137,7 +142,7 @@ body{
 }
 .wrapper .buttons{
   display: flex;
-  width: 150%;
+  width: 100%;
   justify-content: space-between;
 }
 .buttons button{
