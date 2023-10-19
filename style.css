@@ -86,6 +86,7 @@ body{
 }
 .wrapper .social-icons{
   margin: 15px 0 25px 0;
+  width: 120%;
 }
 .social-icons a{
   position: relative;
@@ -136,7 +137,7 @@ body{
 }
 .wrapper .buttons{
   display: flex;
-  width: 100%;
+  width: 150%;
   justify-content: space-between;
 }
 .buttons button{
