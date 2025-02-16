@@ -15,6 +15,18 @@ l<!DOCTYPE html>
 </head>
 
 <body>
+    
+    <!-- Floating Chatbot Icon -->
+    <div class="chatbot-icon" onclick="toggleChatbot()">
+        <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="Chatbot Icon">
+    </div>
+
+    <!-- Chatbot Window -->
+    <div class="chatbot-window" id="chatbotWindow">
+        <button class="close-btn" onclick="toggleChatbot()">×</button>
+        <iframe src="chatbot.html" id="chatbotIframe"></iframe>
+    </div>
+    
     <div class="wrapper">
         <div class="img-area">
             <div class="inner-area">
