@@ -26,6 +26,17 @@ l<!DOCTYPE html>
         <button class="close-btn" onclick="toggleChatbot()">×</button>
         <iframe src="chatbot.html" id="chatbotIframe"></iframe>
     </div>
+    <script>
+        // Function to toggle chatbot window
+        function toggleChatbot() {
+            const chatbotWindow = document.getElementById('chatbotWindow');
+            if (chatbotWindow.style.display === 'none' || chatbotWindow.style.display === '') {
+                chatbotWindow.style.display = 'block';
+            } else {
+                chatbotWindow.style.display = 'none';
+            }
+        }
+    </script>
     
     <div class="wrapper">
         <div class="img-area">
