@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Chatbot</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.3/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a2e;
+            color: #ffffff;
+        }
+        .input-field {
+            background-color: #0f3460;
+            color: #000000;
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #e94560;
+            box-shadow: 0 0 10px #e94560;
+        }
+        .bubble {
+            background-color: #16213e;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            animation: bubbleAnimation 0.5s ease-out forwards;
+        }
+        @keyframes bubbleAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .typing-indicator {
+            display: none;
+            font-size: 14px;
+        }
+        .visible {
+            display: block;
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #ffffff;
+            animation: spin 1s infinite linear;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-md mx-auto p-4">
+        <div class="chat-window mb-4">
+            <div id="chat-content" class="overflow-auto h-96 bg-gray-800 p-4 rounded-lg">
+                <!-- Chat bubbles will appear here -->
+            </div>
+            <div class="typing-indicator p-2" id="typing-indicator">Processing... <span class="spinner"></span></div>
+        </div>
+        <div class="flex">
+            <input id="chat-input" class="input-field flex-grow p-2 rounded-l-lg" type="text" placeholder="Type your message or request an image...">
+            <button id="send-button" class="bg-blue-500 text-white p-2 rounded-r-lg hover:bg-blue-600">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const chatContent = document.getElementById('chat-content');
+        const chatInput = document.getElementById('chat-input');
+        const sendButton = document.getElementById('send-button');
+        const typingIndicator = document.getElementById('typing-indicator');
+
+        sendButton.addEventListener('click', () => {
+            const userMessage = chatInput.value.trim();
+            if (userMessage) {
+                appendUserBubble(userMessage);
+                chatInput.value = '';
+                showTypingIndicator();
+                
+                if (userMessage.toLowerCase().startsWith('image:')) {
+                    const imagePrompt = userMessage.slice(6).trim();
+                    fetchImageResponse(imagePrompt);
+                } else {
+                    fetchTextResponse(userMessage);
+                }
+            }
+        });
+
+        function appendUserBubble(message) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble bg-blue-600 ml-auto';
+            bubble.innerText = message;
+            chatContent.appendChild(bubble);
+        }
+
+        function appendChatbotBubble(message) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble bg-gray-700 mr-auto';
+            bubble.innerText = message;
+            chatContent.appendChild(bubble);
+        }
+
+        function appendImageBubble(imageUrl) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble bg-gray-700 mr-auto';
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.alt = "Generated Image";
+            img.className = "rounded-lg";
+            bubble.appendChild(img);
+            chatContent.appendChild(bubble);
+        }
+
+        function showTypingIndicator() {
+            typingIndicator.classList.add('visible');
+        }
+
+        function hideTypingIndicator() {
+            typingIndicator.classList.remove('visible');
+        }
+
+        function fetchTextResponse(prompt) {
+            const data = JSON.stringify({ prompt });
+
+            fetch('https://backend.buildpicoapps.com/aero/run/llm-api?pk=v1-Z0FBQUFBQm5yM1J5LUVERGx5SnhBcUpQZTl2NHgyVFhTMkZrbUFQa1o3Xzd3YU9IU2VoSWpUMlZhdjgtWHpzeHJ2ODRVQWZSalZ3NGFkcFhOYmRVM3Z2LTFzSHM3ckczNWc9PQ==', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                hideTypingIndicator();
+                if (responseData.status === "success") {
+                    appendChatbotBubble(responseData.text);
+                } else {
+                    console.error('API returned an error:', responseData);
+                    appendChatbotBubble("Something went wrong, please try again later.");
+                }
+            })
+            .catch(error => {
+                hideTypingIndicator();
+                console.error('Network error:', error);
+                appendChatbotBubble("Failed to connect to the server. Please check your connection.");
+            });
+        }
+
+        function fetchImageResponse(prompt) {
+            const data = JSON.stringify({ prompt });
+
+            fetch('https://backend.buildpicoapps.com/aero/run/image-generation-api?pk=v1-Z0FBQUFBQm5yM1NsU0I5VTdhV2dRQnMzMEhjOGhHZXctSlp3V2EyTWxFWmQwZG5LNEJSRXFjVnVXSUQyc2dtMnVVbzlDT05sZWZqNjExYmo4WWFkSFpRNG5BVjZYWWttTWc9PQ==', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            })
+            .then(response => response.json())
+            .then(responseData => {
+                hideTypingIndicator();
+                if (responseData.status === "success") {
+                    appendImageBubble(responseData.imageUrl);
+                } else {
+                    console.error('API returned an error:', responseData);
+                    appendChatbotBubble("Something went wrong with the image generation, please try again later.");
+                }
+            })
+            .catch(error => {
+                hideTypingIndicator();
+                console.error('Network error:', error);
+                appendChatbotBubble("Failed to connect to the image server. Please check your connection.");
+            });
+        }
+    </script>
+</body>
+</html>
